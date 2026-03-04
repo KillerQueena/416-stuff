@@ -624,9 +624,353 @@
     .toast { display: none; }
     body::before { display: none; }
   }
+
+  /* ─── LOGIN SCREEN ─── */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    background: #0d0b09;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px);
+  }
+
+  #loginScreen.hidden {
+    animation: screenOut 0.5s ease-in forwards;
+    pointer-events: none;
+  }
+
+  @keyframes screenOut {
+    to { opacity: 0; transform: scale(1.02); }
+  }
+
+  .login-logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 18px;
+    opacity: 0.9;
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+
+  .login-box {
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #2a2520;
+    background: #111009;
+    padding: 40px 44px;
+    position: relative;
+    box-shadow: 0 0 60px rgba(139,0,0,0.15), 0 0 0 1px #1a1510;
+  }
+
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+
+  .login-org {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 4px;
+    color: #4a3f32;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .login-title {
+    font-family: var(--head);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #c8bfaf;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .login-field {
+    margin-bottom: 18px;
+  }
+
+  .login-field label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #5a5040;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .login-field input {
+    width: 100%;
+    background: #0a0806;
+    border: 1px solid #2a2418;
+    border-bottom-color: #3a3020;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #c8bfaf;
+    outline: none;
+    letter-spacing: 2px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    caret-color: var(--red);
+  }
+
+  .login-field input:focus {
+    border-color: #3d1a1a;
+    border-bottom-color: var(--red);
+    box-shadow: 0 2px 0 0 rgba(139,0,0,0.3);
+  }
+
+  .login-field input::placeholder {
+    color: #2a2218;
+    letter-spacing: 1px;
+  }
+
+  .login-field input[type="password"] {
+    letter-spacing: 6px;
+    font-size: 14px;
+  }
+
+  .login-error {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #cc3333;
+    text-align: center;
+    margin-bottom: 14px;
+    min-height: 14px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .login-error.show { opacity: 1; }
+
+  .login-btn {
+    width: 100%;
+    background: #1a0a0a;
+    border: 1px solid #3d1a1a;
+    color: #c8bfaf;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(139,0,0,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+
+  .login-btn:hover {
+    border-color: var(--red);
+    color: #e8dfd0;
+    background: #220a0a;
+  }
+
+  .login-btn:hover::after { transform: translateX(100%); }
+
+  .login-btn.primary {
+    background: #3d0a0a;
+    border-color: #8b0000;
+    color: #e8dfd0;
+  }
+
+  .login-btn.primary:hover {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .login-divider {
+    border: none;
+    border-top: 1px solid #1a1410;
+    margin: 16px 0;
+    position: relative;
+  }
+
+  .login-divider::after {
+    content: '· · ·';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #111009;
+    padding: 0 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #2a2218;
+    letter-spacing: 3px;
+  }
+
+  .login-footer {
+    margin-top: 22px;
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 2px;
+    color: #2a2218;
+    text-align: center;
+    line-height: 2;
+    text-transform: uppercase;
+  }
+
+  .login-attempts {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #3a2a1a;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* View-only banner */
+  #viewBanner {
+    display: none;
+    background: #1a0f08;
+    border-bottom: 2px solid var(--red);
+    padding: 8px 20px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #8b6040;
+    text-align: center;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  #viewBanner span {
+    color: var(--red);
+    margin-right: 6px;
+  }
+
+  #viewBanner button {
+    margin-left: 20px;
+    background: none;
+    border: 1px solid #4a3020;
+    color: #8b6040;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  #viewBanner button:hover {
+    border-color: var(--red);
+    color: #cc5030;
+  }
+
+  /* Read-only state */
+  body.view-only .document input,
+  body.view-only .document textarea,
+  body.view-only .document select {
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.85;
+  }
+
+  body.view-only .clearance-btn,
+  body.view-only .status-badge,
+  body.view-only #photoBox {
+    pointer-events: none;
+  }
+
+  body.view-only .action-bar .btn-print:not(.no-hide) {
+    display: none;
+  }
+
+  /* Shake animation for wrong password */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+
+  .shake { animation: shake 0.4s ease; }
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <svg class="login-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="46" fill="none" stroke="#5a3030" stroke-width="3"/>
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#3a1a1a" stroke-width="1"/>
+    <line x1="50" y1="50" x2="82" y2="50" stroke="#8b0000" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="82,44 92,50 82,56" fill="#8b0000"/>
+    <line x1="50" y1="50" x2="22.7" y2="66" stroke="#8b0000" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="16,62 18,74 29,70" fill="#8b0000"/>
+    <line x1="50" y1="50" x2="22.7" y2="34" stroke="#8b0000" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="16,38 18,26 29,30" fill="#8b0000"/>
+    <circle cx="50" cy="50" r="5" fill="#8b0000"/>
+  </svg>
+
+  <div class="login-box" id="loginBox">
+    <div class="login-org">SCP Foundation · Administrative Division</div>
+    <div class="login-title">Secure Access Portal</div>
+
+    <div class="login-field">
+      <label>Authorized Email</label>
+      <input type="email" id="loginEmail" placeholder="user@domain.net" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="login-field">
+      <label>Access Code</label>
+      <input type="password" id="loginPass" placeholder="••••" onkeydown="if(event.key==='Enter') attemptLogin()">
+    </div>
+
+    <div class="login-error" id="loginError">— INVALID CREDENTIALS —</div>
+
+    <button class="login-btn primary" onclick="attemptLogin()">◼ Authenticate &amp; Edit</button>
+
+    <div class="login-divider"></div>
+
+    <button class="login-btn" onclick="enterViewOnly()">◻ View Without Login</button>
+
+    <div class="login-attempts" id="attemptsDisplay"></div>
+
+    <div class="login-footer">
+      Unauthorized access is a Class-III infraction.<br>
+      All sessions are logged and monitored.<br>
+      Site-Admin · O5 Security Protocol Active
+    </div>
+  </div>
+</div>
+
+<!-- VIEW-ONLY BANNER -->
+<div id="viewBanner">
+  <span>◈</span> READ-ONLY MODE — EDITS DISABLED
+  <button onclick="showLoginFromBanner()">Login to Edit</button>
+</div>
 
 <div class="document" id="scpDoc">
 
@@ -921,6 +1265,72 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  // ─── AUTH ───
+  const VALID_EMAIL = 'AdministrativeCouncilMain.scip.net';
+  const VALID_PASS  = '6892';
+  let failCount = 0;
+  let locked = false;
+
+  function attemptLogin() {
+    if (locked) return;
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value.trim();
+    const errEl = document.getElementById('loginError');
+    const box   = document.getElementById('loginBox');
+
+    if (email === VALID_EMAIL && pass === VALID_PASS) {
+      errEl.classList.remove('show');
+      document.getElementById('loginScreen').classList.add('hidden');
+      setTimeout(() => {
+        document.getElementById('loginScreen').style.display = 'none';
+      }, 500);
+      document.body.classList.remove('view-only');
+      document.getElementById('viewBanner').style.display = 'none';
+      showToast('◼ ACCESS GRANTED · EDIT MODE');
+    } else {
+      failCount++;
+      errEl.classList.add('show');
+      box.classList.remove('shake');
+      void box.offsetWidth; // reflow
+      box.classList.add('shake');
+      document.getElementById('loginPass').value = '';
+
+      const remaining = Math.max(0, 5 - failCount);
+      if (failCount >= 5) {
+        locked = true;
+        errEl.textContent = '— ACCOUNT LOCKED · CONTACT SITE ADMIN —';
+        document.querySelectorAll('.login-btn').forEach(b => {
+          b.disabled = true;
+          b.style.opacity = '0.3';
+        });
+        document.getElementById('attemptsDisplay').textContent = '⚠ ACCESS SUSPENDED';
+      } else {
+        errEl.textContent = '— INVALID CREDENTIALS —';
+        document.getElementById('attemptsDisplay').textContent =
+          remaining + ' attempt' + (remaining !== 1 ? 's' : '') + ' remaining';
+      }
+    }
+  }
+
+  function enterViewOnly() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('loginScreen').style.display = 'none';
+    }, 500);
+    document.body.classList.add('view-only');
+    document.getElementById('viewBanner').style.display = 'block';
+    showToast('◻ VIEW-ONLY MODE ACTIVE');
+  }
+
+  function showLoginFromBanner() {
+    document.body.classList.remove('view-only');
+    document.getElementById('viewBanner').style.display = 'none';
+    const ls = document.getElementById('loginScreen');
+    ls.style.display = 'flex';
+    ls.classList.remove('hidden');
+    document.getElementById('loginEmail').focus();
+  }
+
   // ─── Generate ID on load ───
   const genId = () => {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
