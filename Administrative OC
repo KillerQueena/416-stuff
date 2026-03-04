@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP Foundation — Personnel Dossier</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Special+Elite&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #e8e0d0;
+    --paper-dark: #d4c9b0;
+    --red: #8b0000;
+    --red-bright: #cc0000;
+    --stamp-green: #1a4a1a;
+    --faded: #6b5f4e;
+    --line: #b0a090;
+    --mono: 'Share Tech Mono', monospace;
+    --type: 'Special Elite', cursive;
+    --head: 'Oswald', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #2a2520;
+    font-family: var(--type);
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .document {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 60px 70px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px #b0a090,
+      6px 6px 0 #1a1510,
+      12px 12px 30px rgba(0,0,0,0.6);
+    /* Paper texture */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, #ede5d5 0%, #e8e0d0 40%, #e4dbc8 100%);
+    animation: pageLoad 0.6s ease-out;
+  }
+
+  @keyframes pageLoad {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hole punches */
+  .document::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 60px,
+      var(--paper-dark) 60px,
+      var(--paper-dark) 62px,
+      transparent 62px,
+      transparent 80px
+    );
+    border-right: 1px dashed var(--line);
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    text-align: center;
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .scp-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+    position: relative;
+  }
+
+  .scp-logo svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .org-name {
+    font-family: var(--head);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    color: var(--faded);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .doc-title {
+    font-family: var(--head);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .doc-subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--faded);
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+
+  .clearance-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 5px 14px;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .clearance-level {
+    color: #ffcc00;
+    font-weight: bold;
+  }
+
+  /* ─── STAMPS ─── */
+  .stamp {
+    position: absolute;
+    font-family: var(--head);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .stamp-classified {
+    top: 15px;
+    right: -10px;
+    font-size: 22px;
+    color: var(--red);
+    border: 3px solid var(--red);
+    padding: 4px 10px;
+    transform: rotate(8deg);
+    opacity: 0.55;
+  }
+
+  .stamp-approved {
+    bottom: 30px;
+    right: 40px;
+    font-size: 16px;
+    color: var(--stamp-green);
+    border: 2px solid var(--stamp-green);
+    padding: 3px 8px;
+    transform: rotate(-5deg);
+    opacity: 0.5;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section {
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-family: var(--head);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    border-bottom: 1px solid var(--red);
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content: '▶';
+    font-size: 7px;
+  }
+
+  /* ─── PHOTO + ID GRID ─── */
+  .id-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  .photo-box {
+    position: relative;
+  }
+
+  .photo-placeholder {
+    width: 140px;
+    height: 175px;
+    border: 2px solid var(--ink);
+    background: var(--paper-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .photo-placeholder:hover { background: #cfc4a8; }
+
+  .photo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+
+  .photo-placeholder img.loaded { display: block; }
+
+  .photo-placeholder .upload-hint {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--faded);
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  .photo-placeholder .upload-hint svg {
+    display: block;
+    margin: 0 auto 8px;
+    opacity: 0.4;
+  }
+
+  #photoInput { display: none; }
+
+  .photo-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--faded);
+    text-align: center;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  /* ─── FIELDS ─── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+  }
+
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field {
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  .field-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--faded);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .field-label .req {
+    color: var(--red);
+    font-size: 10px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 4px 2px;
+    font-family: var(--type);
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    caret-color: var(--red);
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--red);
+    background: rgba(139,0,0,0.03);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #b8a890;
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+    border: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .field textarea:focus {
+    border-color: var(--red);
+  }
+
+  .field select {
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+
+  /* ─── CLEARANCE SELECTOR ─── */
+  .clearance-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .clearance-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    background: transparent;
+    cursor: pointer;
+    color: var(--faded);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .clearance-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  .clearance-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .clearance-btn.level-5.active { background: var(--red); border-color: var(--red); }
+
+  /* ─── LORE / NOTES SECTION ─── */
+  .lore-box {
+    border: 1px solid var(--line);
+    background: rgba(0,0,0,0.02);
+    padding: 14px;
+    position: relative;
+  }
+
+  .lore-box::before {
+    content: 'ADDENDUM';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    background: var(--paper);
+    padding: 0 6px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--faded);
+  }
+
+  .lore-box textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: var(--type);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.8;
+    caret-color: var(--red);
+  }
+
+  .lore-box textarea::placeholder {
+    color: #b8a890;
+    font-style: italic;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--line);
+    margin: 24px 0;
+  }
+
+  /* ─── ANOMALY STATUS BADGES ─── */
+  .status-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .status-badge {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border: 1px solid currentColor;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    color: var(--faded);
+    border-color: var(--line);
+  }
+
+  .status-badge:hover { opacity: 0.7; }
+  .status-badge.active-safe { background: #1a4a1a; color: #98e898; border-color: #1a4a1a; }
+  .status-badge.active-euclid { background: #3d3000; color: #ffd84d; border-color: #ffd84d; }
+  .status-badge.active-keter { background: #4a0000; color: #ff6666; border-color: #8b0000; }
+  .status-badge.active-thaumiel { background: #001a3d; color: #4d9fff; border-color: #004d99; }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    margin-top: 40px;
+    border-top: 2px solid var(--ink);
+    padding-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 20px;
+  }
+
+  .sig-line {
+    border-bottom: 1px solid var(--ink);
+    height: 40px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .sig-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--faded);
+    text-transform: uppercase;
+  }
+
+  .doc-id-box {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--faded);
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+
+  .barcode {
+    font-family: var(--mono);
+    font-size: 18px;
+    letter-spacing: -1px;
+    color: var(--ink);
+    opacity: 0.3;
+  }
+
+  /* ─── PRINT/SAVE BUTTON ─── */
+  .action-bar {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .btn-print {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 10px 30px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin: 0 8px;
+  }
+
+  .btn-print:hover { background: var(--red); }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--faded);
+  }
+
+  .btn-secondary:hover { background: var(--paper-dark); color: var(--ink); }
+
+  /* ─── REDACTION EFFECT ─── */
+  .redacted {
+    background: var(--ink);
+    color: transparent;
+    user-select: none;
+    padding: 0 4px;
+    position: relative;
+  }
+
+  /* ─── LIVE PREVIEW ─── */
+  .preview-name {
+    font-family: var(--head);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    min-height: 28px;
+  }
+
+  .preview-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--faded);
+    letter-spacing: 2px;
+    margin-top: 2px;
+    min-height: 16px;
+  }
+
+  .field-group-header {
+    font-family: var(--head);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--faded);
+    text-transform: uppercase;
+    margin: 18px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .field-group-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 12px 24px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .document { padding: 30px 24px; }
+    .id-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .field-row.triple { grid-template-columns: 1fr 1fr; }
+    .doc-footer { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .document { box-shadow: none; padding: 30px; }
+    .action-bar { display: none; }
+    .toast { display: none; }
+    body::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="document" id="scpDoc">
+
+  <!-- Stamps -->
+  <span class="stamp stamp-classified">Classified</span>
+  <span class="stamp stamp-approved">O5 Approved</span>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="scp-logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+        <!-- Arrow pointing right -->
+        <line x1="50" y1="50" x2="82" y2="50" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="82,44 92,50 82,56" fill="#1a1a1a"/>
+        <!-- Arrow pointing lower-left -->
+        <line x1="50" y1="50" x2="22.7" y2="66" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="16,62 18,74 29,70" fill="#1a1a1a"/>
+        <!-- Arrow pointing upper-left -->
+        <line x1="50" y1="50" x2="22.7" y2="34" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="16,38 18,26 29,30" fill="#1a1a1a"/>
+        <!-- Center dot -->
+        <circle cx="50" cy="50" r="5" fill="#1a1a1a"/>
+      </svg>
+    </div>
+    <div class="org-name">SCP Foundation · Administrative Division</div>
+    <div class="doc-title">Personnel Dossier</div>
+    <div class="doc-subtitle">FORM AD-7 · OFFICIAL RECORD · DO NOT DUPLICATE</div>
+    <div class="clearance-bar">
+      <span>SITE ADMIN USE ONLY</span>
+      <span>CLEARANCE: <span class="clearance-level" id="clearanceDisplay">LEVEL 1</span></span>
+      <span>DOC CLASS: <span id="docClassDisplay">UNRESTRICTED</span></span>
+    </div>
+  </div>
+
+  <!-- IDENTITY -->
+  <div class="id-grid">
+    <div class="photo-box">
+      <div class="photo-placeholder" id="photoBox" title="Click to upload photo">
+        <input type="file" id="photoInput" accept="image/*">
+        <img id="photoImg" alt="Personnel Photo">
+        <div class="upload-hint" id="uploadHint">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b5f4e" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          UPLOAD<br>PHOTO<br>· · ·
+        </div>
+      </div>
+      <div class="photo-label">IDENTIFICATION PHOTO</div>
+    </div>
+
+    <div>
+      <div style="margin-bottom: 6px;">
+        <div class="preview-name" id="previewName">[ FULL NAME ]</div>
+        <div class="preview-role" id="previewRole">DESIGNATION PENDING</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><span class="req">✦</span> Full Legal Name</div>
+        <input type="text" id="fullName" placeholder="Last, First Middle" maxlength="80"
+          oninput="update('previewName', this.value || '[ FULL NAME ]')">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label"><span class="req">✦</span> Designation / Codename</div>
+          <input type="text" id="codename" placeholder="e.g. Dr. Bright, Agent Cross"
+            oninput="update('previewRole', this.value || 'DESIGNATION PENDING')">
+        </div>
+        <div class="field">
+          <div class="field-label">Personnel ID</div>
+          <input type="text" id="personnelId" placeholder="Auto-generated" readonly
+            style="color: var(--faded);">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHYSICAL PROFILE -->
+  <div class="section">
+    <div class="section-title">Physical Profile</div>
+
+    <div class="field-row triple">
+      <div class="field">
+        <div class="field-label">Age</div>
+        <input type="number" id="age" placeholder="—" min="18" max="120"
+          oninput="validateAge(this)">
+      </div>
+      <div class="field">
+        <div class="field-label">Height</div>
+        <input type="text" id="height" placeholder='e.g. 5\'10" / 178cm'>
+      </div>
+      <div class="field">
+        <div class="field-label">Weight</div>
+        <input type="text" id="weight" placeholder="e.g. 165 lbs / 75kg">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label">Eye Color</div>
+        <input type="text" id="eyes" placeholder="Brown, Blue, etc.">
+      </div>
+      <div class="field">
+        <div class="field-label">Hair Color</div>
+        <input type="text" id="hair" placeholder="Black, Auburn, etc.">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label">Blood Type</div>
+        <select id="bloodType">
+          <option value="">— Select —</option>
+          <option>A+</option><option>A−</option>
+          <option>B+</option><option>B−</option>
+          <option>AB+</option><option>AB−</option>
+          <option>O+</option><option>O−</option>
+          <option>Unknown</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="field-label">Notable Features</div>
+        <input type="text" id="features" placeholder="Scars, tattoos, distinguishing marks">
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ADMINISTRATIVE -->
+  <div class="section">
+    <div class="section-title">Administrative Profile</div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label"><span class="req">✦</span> Department</div>
+        <select id="department">
+          <option value="">— Select Department —</option>
+          <option>Research Division</option>
+          <option>Mobile Task Force</option>
+          <option>Containment Division</option>
+          <option>Ethics Committee</option>
+          <option>Administrative Division</option>
+          <option>O5 Council</option>
+          <option>Site Security</option>
+          <option>Medical Division</option>
+          <option>Information Security</option>
+          <option>Recruitment</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="field-label">Site Assignment</div>
+        <input type="text" id="site" placeholder="e.g. Site-19, Area-179">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label">Title / Rank</div>
+        <select id="rank">
+          <option value="">— Select —</option>
+          <option>Class D Personnel</option>
+          <option>Junior Researcher</option>
+          <option>Researcher</option>
+          <option>Senior Researcher</option>
+          <option>Doctor</option>
+          <option>Agent</option>
+          <option>Senior Agent</option>
+          <option>Commander</option>
+          <option>Director</option>
+          <option>Site Director</option>
+          <option>O5 Council Member</option>
+          <option>Administrator</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="field-label">Date of Assignment</div>
+        <input type="date" id="assignDate">
+      </div>
+    </div>
+
+    <div class="field-group-header">Security Clearance</div>
+    <div class="clearance-selector" id="clearanceSelector">
+      <button class="clearance-btn active" data-level="1" onclick="setClearance(this)">Level 1</button>
+      <button class="clearance-btn" data-level="2" onclick="setClearance(this)">Level 2</button>
+      <button class="clearance-btn" data-level="3" onclick="setClearance(this)">Level 3</button>
+      <button class="clearance-btn" data-level="4" onclick="setClearance(this)">Level 4</button>
+      <button class="clearance-btn level-5" data-level="5" onclick="setClearance(this)">Level 5 · O5</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ANOMALY STATUS -->
+  <div class="section">
+    <div class="section-title">Anomaly Exposure Status</div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label">Memetic Resistance Rating</div>
+        <input type="text" id="memeticRating" placeholder="e.g. MR-3 / Exceptional">
+      </div>
+      <div class="field">
+        <div class="field-label">Known Anomalous Properties</div>
+        <input type="text" id="anomalous" placeholder="None on record / [DATA EXPUNGED]">
+      </div>
+    </div>
+
+    <div class="field-group-header">Anomaly Classification (if applicable)</div>
+    <div class="status-grid" id="statusGrid">
+      <button class="status-badge" data-status="safe" onclick="setStatus(this, 'safe')">SAFE</button>
+      <button class="status-badge" data-status="euclid" onclick="setStatus(this, 'euclid')">EUCLID</button>
+      <button class="status-badge" data-status="keter" onclick="setStatus(this, 'keter')">KETER</button>
+      <button class="status-badge" data-status="thaumiel" onclick="setStatus(this, 'thaumiel')">THAUMIEL</button>
+      <button class="status-badge" onclick="clearStatus()" style="font-size:7px; letter-spacing:1px; padding: 4px 8px;">✕ N/A</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SPECIALIZATIONS -->
+  <div class="section">
+    <div class="section-title">Specializations & Qualifications</div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="field-label">Primary Specialization</div>
+        <input type="text" id="spec1" placeholder="e.g. Cognitohazard Research">
+      </div>
+      <div class="field">
+        <div class="field-label">Secondary Specialization</div>
+        <input type="text" id="spec2" placeholder="e.g. Xenolinguistics">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Known Languages</div>
+      <input type="text" id="languages" placeholder="English, Arabic, [REDACTED]...">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- LORE / NOTES -->
+  <div class="section">
+    <div class="section-title">Personnel Lore / Background</div>
+    <div class="lore-box">
+      <textarea id="loreText" placeholder="Enter personnel background, history, notes, or lore here. This field is unrestricted in length. Use [DATA EXPUNGED] or ████████ for redacted content..."></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Incident & Exposure Log</div>
+    <div class="lore-box">
+      <textarea id="incidentLog" style="min-height: 80px;" placeholder="Document any anomalous incidents, containment breaches, or notable events involving this personnel..."></textarea>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>
+      <div class="sig-line"></div>
+      <div class="sig-label">Authorizing Officer Signature</div>
+    </div>
+    <div class="doc-id-box">
+      <div class="barcode" id="barcodeDisplay">| ||| || ||| | || |||</div>
+      <div id="docDate">DATE: —</div>
+      <div id="docIdFooter">ID: —</div>
+      <div style="margin-top: 4px; font-size: 7px; letter-spacing: 1px; opacity: 0.6;">
+        SCP FOUNDATION · SECURE · CONTAIN · PROTECT
+      </div>
+    </div>
+    <div>
+      <div class="sig-line"></div>
+      <div class="sig-label" style="text-align: right;">Site Director Countersignature</div>
+    </div>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-bar">
+    <button class="btn-print" onclick="window.print()">⬛ Print Dossier</button>
+    <button class="btn-print btn-secondary" onclick="saveDossier()">⬛ Save to File</button>
+    <button class="btn-print btn-secondary" onclick="clearForm()">⬛ Clear Form</button>
+  </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── Generate ID on load ───
+  const genId = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let id = 'AD-';
+    for (let i = 0; i < 8; i++) {
+      if (i === 4) id += '-';
+      id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+  };
+
+  const personnelId = genId();
+  document.getElementById('personnelId').value = personnelId;
+  document.getElementById('docIdFooter').textContent = 'ID: ' + personnelId;
+
+  // Set today's date
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('docDate').textContent = 'DATE: ' + dateStr;
+  document.getElementById('assignDate').value = today.toISOString().split('T')[0];
+
+  // Random barcode visual
+  const barcode = () => {
+    let b = '';
+    for (let i = 0; i < 22; i++) b += Math.random() > 0.5 ? '|' : ' ';
+    return b;
+  };
+  document.getElementById('barcodeDisplay').textContent = barcode();
+
+  // ─── Live field updater ───
+  function update(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val.toUpperCase();
+  }
+
+  // ─── Photo upload ───
+  document.getElementById('photoBox').addEventListener('click', () => {
+    document.getElementById('photoInput').click();
+  });
+
+  document.getElementById('photoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById('photoImg');
+      img.src = e.target.result;
+      img.classList.add('loaded');
+      document.getElementById('uploadHint').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ─── Clearance ───
+  const clearanceMeta = {
+    '1': { label: 'LEVEL 1', docClass: 'UNRESTRICTED' },
+    '2': { label: 'LEVEL 2', docClass: 'RESTRICTED' },
+    '3': { label: 'LEVEL 3', docClass: 'CONFIDENTIAL' },
+    '4': { label: 'LEVEL 4', docClass: 'SECRET' },
+    '5': { label: 'LEVEL 5 · O5', docClass: '███████████' },
+  };
+
+  function setClearance(btn) {
+    document.querySelectorAll('.clearance-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const meta = clearanceMeta[btn.dataset.level];
+    document.getElementById('clearanceDisplay').textContent = meta.label;
+    document.getElementById('docClassDisplay').textContent = meta.docClass;
+  }
+
+  // ─── Anomaly Status ───
+  let activeStatus = null;
+
+  function setStatus(btn, status) {
+    document.querySelectorAll('.status-badge').forEach(b => {
+      b.className = 'status-badge';
+    });
+    if (activeStatus === status) {
+      activeStatus = null;
+    } else {
+      btn.classList.add('active-' + status);
+      activeStatus = status;
+    }
+  }
+
+  function clearStatus() {
+    document.querySelectorAll('.status-badge').forEach(b => b.className = 'status-badge');
+    activeStatus = null;
+  }
+
+  // ─── Age validation ───
+  function validateAge(input) {
+    const val = parseInt(input.value);
+    if (val < 18) { input.style.color = 'var(--red)'; }
+    else { input.style.color = 'var(--ink)'; }
+  }
+
+  // ─── Toast ───
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // ─── Save ───
+  function saveDossier() {
+    const data = {
+      id: personnelId,
+      name: document.getElementById('fullName').value,
+      codename: document.getElementById('codename').value,
+      age: document.getElementById('age').value,
+      height: document.getElementById('height').value,
+      weight: document.getElementById('weight').value,
+      eyes: document.getElementById('eyes').value,
+      hair: document.getElementById('hair').value,
+      bloodType: document.getElementById('bloodType').value,
+      features: document.getElementById('features').value,
+      department: document.getElementById('department').value,
+      site: document.getElementById('site').value,
+      rank: document.getElementById('rank').value,
+      assignDate: document.getElementById('assignDate').value,
+      clearance: document.querySelector('.clearance-btn.active')?.dataset.level,
+      memeticRating: document.getElementById('memeticRating').value,
+      anomalous: document.getElementById('anomalous').value,
+      anomalyClass: activeStatus,
+      spec1: document.getElementById('spec1').value,
+      spec2: document.getElementById('spec2').value,
+      languages: document.getElementById('languages').value,
+      lore: document.getElementById('loreText').value,
+      incidents: document.getElementById('incidentLog').value,
+      date: dateStr
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `SCP-Dossier-${personnelId}.json`;
+    a.click();
+    showToast('◼ DOSSIER SAVED');
+  }
+
+  // ─── Clear ───
+  function clearForm() {
+    if (!confirm('Clear all fields? This cannot be undone.')) return;
+    document.querySelectorAll('input:not([readonly]), textarea, select').forEach(el => {
+      if (el.type === 'date') el.value = today.toISOString().split('T')[0];
+      else el.value = '';
+    });
+    document.getElementById('photoImg').classList.remove('loaded');
+    document.getElementById('uploadHint').style.display = '';
+    document.getElementById('previewName').textContent = '[ FULL NAME ]';
+    document.getElementById('previewRole').textContent = 'DESIGNATION PENDING';
+    clearStatus();
+    document.querySelectorAll('.clearance-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === 0);
+    });
+    document.getElementById('clearanceDisplay').textContent = 'LEVEL 1';
+    document.getElementById('docClassDisplay').textContent = 'UNRESTRICTED';
+    showToast('◼ FORM CLEARED');
+  }
+</script>
+</body>
+</html>
